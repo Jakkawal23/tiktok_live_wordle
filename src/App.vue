@@ -3,7 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 </script>
 
-<template>
+<!-- <template>
   <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
@@ -15,13 +15,12 @@ import HelloWorld from './components/HelloWorld.vue'
         <RouterLink to="/about">About</RouterLink>
       </nav>
     </div>
-
-    <h1 class="text-5xl font-bold text-red-100 underline">
-      Hello world!
-    </h1>
-
   </header>
 
+  <RouterView />
+</template> -->
+
+<template>
   <RouterView />
 </template>
 

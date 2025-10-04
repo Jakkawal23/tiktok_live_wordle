@@ -1,46 +1,41 @@
 <script setup lang="ts">
 const toggleTheme = () => {
   const root = document.documentElement;
-  const current = root.getAttribute("data-theme");
-  root.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+  if (root.classList.contains("dark")) {
+    root.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+  } else {
+    root.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  }
 };
 </script>
 
 <template>
-  <header class="header">
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="40" height="40" />
-    <h1 class="title">My Web</h1>
-    <div class="actions">
-      <button @click="$emit('toggleSidebar')">☰</button>
-      <button @click="toggleTheme">🌓</button>
+  <header
+    class="flex items-center justify-between px-4 py-2 border-b border-border"
+    :class="{ 'bg-background': true }"
+  >
+    <!-- Left -->
+    <div class="flex items-center space-x-3">
+      <button
+        class="text-2xl p-2 rounded-md hover:bg-backgroundSoft dark:hover:bg-gray-700"
+        @click="$emit('toggleSidebar')"
+      >
+        ☰
+      </button>
+      <img alt="Vue logo" class="w-8 h-8" src="@/assets/logo.svg" />
+      <h1 class="text-lg font-bold text-heading">My Web</h1>
+    </div>
+
+    <!-- Right -->
+    <div class="flex items-center space-x-3">
+      <button
+        class="p-2 rounded-md text-xl hover:bg-backgroundSoft dark:hover:bg-gray-700"
+        @click="toggleTheme"
+      >
+        🌗
+      </button>
     </div>
   </header>
 </template>
-
-<style scoped>
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
-  background: var(--color-background);
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text);
-}
-
-.title {
-  flex: 1;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: var(--color-heading);
-}
-
-.menu-btn,
-.actions button {
-  font-size: 1.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text);
-}
-</style>

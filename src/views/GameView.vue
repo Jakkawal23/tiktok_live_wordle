@@ -1,130 +1,103 @@
-<!-- ส่วนหัว + Navbar -->
-<!-- <div class="footer-wrapper"> -->
-<!-- Kofi Button (ไฟล์ภายนอก: ./lib/Kofi.vue) -->
-<!-- <Kofi name="narze" label="Support Me" /> -->
-<!-- เมนูลิงก์ (ไฟล์ภายนอก: ./lib/Menu.vue) -->
-<!-- <Menu :items="menuItems" /> -->
-<!-- Social Share (ไฟล์ภายนอก: ./lib/Social.vue) -->
-<!-- <Social :url="url" :title="title" /> -->
-<!-- </div> -->
-
-<!-- Head (Meta / SEO) 
-  <Head
-    :title="title"
-    :description="description"
-    :url="url"
-    :imageUrl="imageUrl"
-    :gtagId="gtagId"
-  />-->
-
 <template>
-  <main class="container h-screen flex flex-col items-center dark:bg-slate-800">
-    <span class="flex gap-4 dark:text-white my-2">
-      <span>วันที่ {{ dateIndex + 1 }}</span>
-      <span>ครั้งที่ {{ attemptsLength }}/{{ attemptLimit }}</span>
-    </span>
+  <main class="flex flex-col h-full">
+    <!-- ส่วนแสดงผลคำตอบ -->
+    <div class="flex-1 flex flex-col items-center">
+      <span class="flex gap-4 my-2">
+        <span>วันที่ {{ dateIndex + 1 }}</span>
+        <span>ครั้งที่ {{ attemptsLength }}/{{ attemptLimit }}</span>
+      </span>
 
-    <!-- ช่องแสดงผลคำตอบ -->
-    <div class="attempts grow overflow-y-auto" ref="attemptsContainer">
-      <!-- ความพยายามที่เคยลอง -->
-      <div v-for="(inputWord, n) in attempts" :key="n" class="flex justify-center my-1">
-        <div
-          v-for="({ correct, char }, idx) in validations[n] || []"
-          :key="idx"
-          :class="[
-            colors[correct] || 'bg-black',
-            'attempt-key border-solid border-2 flex items-center justify-center mx-0.5 text-3xl font-bold text-white rounded',
-          ]"
-        >
-          {{ char ?? "" }}
+      <div class="attempts flex flex-col items-center gap-2">
+        <!-- ความพยายามที่เคยลอง -->
+        <div v-for="(inputWord, n) in attempts" :key="n" class="flex justify-center my-1">
+          <div
+            v-for="({ correct, char }, idx) in validations[n] || []"
+            :key="idx"
+            :class="[
+              colors[correct] || 'bg-background',
+              'attempt-key flex items-center justify-center mx-1 text-3xl font-bold text-white',
+            ]"
+          >
+            {{ char ?? "" }}
+          </div>
         </div>
-      </div>
 
-      <!-- ช่อง input ที่กำลังพิมพ์ -->
-      <div v-if="!gameEnded" class="flex justify-center my-1">
-        <div
-          v-for="(_, i) in solutionLength"
-          :key="i"
-          class="attempt-key bg-white border-solid border-2 flex items-center justify-center mx-0.5 text-3xl font-bold rounded w-12 h-12 dark:bg-slate-800 dark:text-white"
-        >
-          {{ splittedInput[i] || "" }}
+        <!-- ช่อง input ที่กำลังพิมพ์ -->
+        <div v-if="!gameEnded" class="flex justify-center my-1">
+          <div
+            v-for="(_, i) in solutionLength"
+            :key="i"
+            class="attempt-key flex items-center justify-center mx-1 text-3xl font-bold bg-card text-text"
+          >
+            {{ splittedInput[i] || "" }}
+          </div>
         </div>
-      </div>
 
-      <!-- ช่องที่เหลือ (ยังไม่ได้เดา) -->
-      <div
-        v-for="(_, n) in Array(Math.max(0, attemptLimit - attempts.length - 1))"
-        :key="n"
-        class="flex justify-center my-1"
-      >
+        <!-- ช่องที่เหลือ (ยังไม่ได้เดา) -->
         <div
-          v-for="_ in Array(solutionLength).fill(0)"
-          :key="_"
-          class="attempt-key bg-white border-solid border-2 flex items-center justify-center mx-0.5 text-3xl font-bold rounded w-12 h-12 dark:bg-slate-800 dark:text-white"
-        />
+          v-for="(_, n) in Array(Math.max(0, attemptLimit - attempts.length - 1))"
+          :key="n"
+          class="flex justify-center my-1"
+        >
+          <div
+            v-for="_ in Array(solutionLength).fill(0)"
+            :key="_"
+            class="attempt-key flex items-center justify-center mx-1 text-3xl font-bold bg-card text-text"
+          />
+        </div>
       </div>
     </div>
 
     <!-- คีย์บอร์ด -->
-    <div class="layout my-4 w-full px-1 max-w-2xl">
-      <input
-        ref="textInput"
-        type="text"
-        class="w-full sm:w-[400px] block border mb-3.5 px-6 py-2 mx-auto text-center dark:bg-gray-600 dark:text-white dark:placeholder:text-white"
-        @keydown="handleKeyPress"
-        @blur="focusOnTextInput = false"
-        @focus="focusOnTextInput = true"
-        v-model="input"
-        :disabled="gameEnded"
-        placeholder="คลิกที่นี่เพื่อใช้คีย์บอร์ด"
-      />
+    <div class="border-t border-border">
+      <div class="layout w-full px-1 max-w-4xl mx-auto">
+        <input
+          ref="textInput"
+          type="text"
+          class="w-full sm:w-[500px] block mb-5 px-5 py-4 mx-auto text-center bg-card text-input placeholder:text-input"
+          @keydown="handleKeyPress"
+          @blur="focusOnTextInput = false"
+          @focus="focusOnTextInput = true"
+          v-model="input"
+          :disabled="gameEnded"
+          placeholder="คลิกที่นี่เพื่อใช้คีย์บอร์ด"
+        />
 
-      <div
-        v-for="(row, rowIndex) in currentRows"
-        :key="rowIndex"
-        class="w-full flex flex-row justify-center touch-manipulation"
-      >
         <div
-          v-for="(alphabet, alphabetIndex) in row"
-          :key="alphabetIndex"
-          class="flex-grow flex m-0.5 relative"
+          v-for="(row, rowIndex) in currentRows"
+          :key="rowIndex"
+          class="w-full flex flex-row justify-center touch-manipulation"
         >
-          <button
-            @click="inputKey(alphabet)"
-            :class="[
-              colors[alphabetStateMap[alphabet]],
-              ['⇧', '↵', '⬅'].includes(alphabet) ? 'border-gray-500' : '',
-              'Kedmanee' === 'ก-ฮ' ? 'layout-no-shift' : '',
-              'flex-grow layout-key border-solid border-2 flex items-end justify-end text-xl font-bold rounded text-black',
-            ]"
+          <div
+            v-for="(alphabet, alphabetIndex) in row"
+            :key="alphabetIndex"
+            class="flex-grow flex m-0.5 relative"
           >
-            {{ alphabet }}
-            <div
-              v-if="
-                currentRows[rowIndex][alphabetIndex] !==
-                inverseRows[rowIndex][alphabetIndex]
-              "
+            <button
+              @click="inputKey(alphabet)"
               :class="[
-                colors[alphabetStateMap[inverseRows[rowIndex][alphabetIndex]]],
-                'absolute top-1 left-1 border-solid border-1 rounded text-sm leading-4 p-0.5 w-4',
+                colors[alphabetStateMap[alphabet]],
+                ['⇧', '↵', '⬅'].includes(alphabet) ? 'border-gray-500' : '',
+                'flex-grow layout-key border-solid border-2 flex items-end justify-end text-xl font-bold rounded text-black h-10 md:h-12 lg:h-14',
               ]"
             >
-              {{ inverseRows[rowIndex][alphabetIndex] }}
-            </div>
-          </button>
+              {{ alphabet }}
+              <div
+                v-if="
+                  currentRows[rowIndex][alphabetIndex] !==
+                  inverseRows[rowIndex][alphabetIndex]
+                "
+                :class="[
+                  colors[alphabetStateMap[inverseRows[rowIndex][alphabetIndex]]],
+                  'absolute top-1 left-1 border-solid border-1 rounded text-sm leading-4 p-0.5 w-4',
+                ]"
+              >
+                {{ inverseRows[rowIndex][alphabetIndex] }}
+              </div>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-
-    <!-- ปุ่ม Share -->
-    <div class="share-button text-center flex">
-      <button
-        v-if="gameEnded"
-        @click="copyResult"
-        class="flex items-center justify-center rounded border mx-2 p-2.5 bg-green-300 border-green-300 text-xs font-bold cursor-pointer bg-green-200 hover:bg-green-300 active:bg-green-400"
-      >
-        {{ copied ? "Copied" : "Share" }}
-      </button>
     </div>
   </main>
 </template>
@@ -341,10 +314,9 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 0.5rem; /* ลดช่องว่าง */
 }
 
 .layout {
-  margin-top: 0.5rem; /* ลดช่องว่างระหว่างตารางและคีย์บอร์ด */
+  margin-top: 1rem;
 }
 </style>

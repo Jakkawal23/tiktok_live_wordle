@@ -13,6 +13,10 @@ body {
   --color-border-hover: rgba(60, 60, 60, 0.29);
   --color-heading: #2c3e50;
   --color-text: #2c3e50;
+  --color-card: #e0e0e0;
+  --color-primary: #158aff;
+  --color-secondary: #ff9800;
+  --color-back-white:#000000;
 }
 
 .dark {
@@ -23,5 +27,25 @@ body {
   --color-border: rgba(84, 84, 84, 0.48);
   --color-border-hover: rgba(84, 84, 84, 0.65);
   --color-heading: #ffffff;
-  --color-text: rgba(235, 235, 235, 0.64);
+  --color-text: rgba(235, 235, 235, 0.87);
+  --color-card: #2c2c2c;
+  --color-primary: #bb86fc;
+  --color-secondary: #ff5722;
+  --color-back-white:#ffffff;
 }
+
+/* Theme helper classes */
+.bg-background { background-color: var(--color-background); }
+.bg-sidebar { background-color: var(--color-sidebar-background); }
+.bg-background-soft { background-color: var(--color-background-soft); }
+.bg-background-mute { background-color: var(--color-background-mute); }
+.bg-card { background-color: var(--color-card); }
+
+.text-text { color: var(--color-text); }
+.text-heading { color: var(--color-heading); }
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+.text-input { color: var(--color-back-white); }
+
+.border-border { border-color: var(--color-border); }
+.border-border-hover:hover { border-color: var(--color-border-hover); }

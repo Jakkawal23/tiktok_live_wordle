@@ -46,6 +46,16 @@ const emit = defineEmits<{
       </li>
       <li>
         <RouterLink
+          to="/tiktok-connect"
+          class="block px-3 py-2 rounded-md text-text hover:bg-backgroundSoft dark:text-text"
+          active-class="bg-backgroundMute font-bold"
+          @click="emit('close')"
+        >
+          Tiktok Connect
+        </RouterLink>
+      </li>
+      <li>
+        <RouterLink
           to="/home"
           class="block px-3 py-2 rounded-md text-text hover:bg-backgroundSoft dark:text-text"
           active-class="bg-backgroundMute font-bold"

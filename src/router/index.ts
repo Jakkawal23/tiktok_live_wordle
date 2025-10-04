@@ -4,6 +4,7 @@ import MainLayout from "@/layouts/MainLayout.vue";
 import HomeView from "@/views/HomeView.vue";
 import AboutView from "@/views/AboutView.vue";
 import GameView from "@/views/GameView.vue";
+import TiktokConnect from "@/views/TiktokConnect.vue";
 
 const routes = [
   {
@@ -14,6 +15,7 @@ const routes = [
       { path: "home", name: "home", component: HomeView },
       { path: "about", name: "about", component: AboutView },
       { path: "game", name: "game", component: GameView },
+      { path: "tiktok-connect", name: "tiktok", component: TiktokConnect },
     ],
   },
 ];
